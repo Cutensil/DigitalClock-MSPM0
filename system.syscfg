@@ -1,0 +1,136 @@
+/**
+ * These arguments were used when this file was generated. They will be automatically applied on subsequent loads
+ * via the GUI or CLI. Run CLI with '--help' for additional information on how to override these arguments.
+ * @cliArgs --device "MSPM0L130X" --package "VQFN-32(RHB)" --part "Default" --product "mspm0_sdk@1.20.01.06"
+ * @versions {"tool":"1.19.0+3426"}
+ */
+scripting.excludeFromBuild("Event.dot");
+
+/**
+ * Import the modules used in this configuration.
+ */
+const Board  = scripting.addModule("/ti/driverlib/Board");
+const GPIO   = scripting.addModule("/ti/driverlib/GPIO", {}, false);
+const GPIO1  = GPIO.addInstance();
+const GPIO2  = GPIO.addInstance();
+const GPIO3  = GPIO.addInstance();
+const GPIO4  = GPIO.addInstance();
+const SYSCTL = scripting.addModule("/ti/driverlib/SYSCTL");
+const TIMER  = scripting.addModule("/ti/driverlib/TIMER", {}, false);
+const TIMER1 = TIMER.addInstance();
+const TIMER2 = TIMER.addInstance();
+const TIMER3 = TIMER.addInstance();
+const TIMER4 = TIMER.addInstance();
+const UART   = scripting.addModule("/ti/driverlib/UART", {}, false);
+const UART1  = UART.addInstance();
+
+/**
+ * Write custom configuration values to the imported modules.
+ */
+
+GPIO1.$name                          = "OLED";
+GPIO1.associatedPins.create(4);
+GPIO1.associatedPins[0].initialValue = "SET";
+GPIO1.associatedPins[0].$name        = "SELECT";
+GPIO1.associatedPins[0].pin.$assign  = "PA2";
+GPIO1.associatedPins[1].$name        = "CLK";
+GPIO1.associatedPins[1].pin.$assign  = "PA6";
+GPIO1.associatedPins[2].$name        = "INPUT";
+GPIO1.associatedPins[2].pin.$assign  = "PA5";
+GPIO1.associatedPins[3].$name        = "CMD";
+GPIO1.associatedPins[3].pin.$assign  = "PA4";
+
+GPIO2.$name                         = "PAD";
+GPIO2.associatedPins.create(8);
+GPIO2.associatedPins[0].$name       = "H1";
+GPIO2.associatedPins[0].direction   = "INPUT";
+GPIO2.associatedPins[0].pin.$assign = "PA0";
+GPIO2.associatedPins[1].$name       = "H2";
+GPIO2.associatedPins[1].direction   = "INPUT";
+GPIO2.associatedPins[1].pin.$assign = "PA1";
+GPIO2.associatedPins[2].$name       = "H3";
+GPIO2.associatedPins[2].direction   = "INPUT";
+GPIO2.associatedPins[2].pin.$assign = "PA7";
+GPIO2.associatedPins[3].$name       = "H4";
+GPIO2.associatedPins[3].direction   = "INPUT";
+GPIO2.associatedPins[3].pin.$assign = "PA12";
+GPIO2.associatedPins[4].$name       = "V1";
+GPIO2.associatedPins[4].pin.$assign = "PA13";
+GPIO2.associatedPins[5].$name       = "V2";
+GPIO2.associatedPins[5].pin.$assign = "PA14";
+GPIO2.associatedPins[6].$name       = "V3";
+GPIO2.associatedPins[6].pin.$assign = "PA17/OPA1.IN0-";
+GPIO2.associatedPins[7].$name       = "V4";
+GPIO2.associatedPins[7].pin.$assign = "PA18";
+
+GPIO3.$name                         = "BUZZER";
+GPIO3.associatedPins[0].$name       = "RING";
+GPIO3.associatedPins[0].pin.$assign = "PA15";
+
+GPIO4.$name                         = "SWITCH";
+GPIO4.associatedPins.create(2);
+GPIO4.associatedPins[0].$name       = "RESET";
+GPIO4.associatedPins[0].direction   = "INPUT";
+GPIO4.associatedPins[0].pin.$assign = "PA8";
+GPIO4.associatedPins[1].$name       = "AUTOSAVE";
+GPIO4.associatedPins[1].direction   = "INPUT";
+GPIO4.associatedPins[1].pin.$assign = "PA10";
+
+SYSCTL.MFCLKEn = true;
+
+TIMER1.$name              = "TIMER_SEC";
+TIMER1.timerMode          = "PERIODIC";
+TIMER1.interrupts         = ["ZERO"];
+TIMER1.timerPeriod        = "1000 ms";
+TIMER1.timerClkPrescale   = 128;
+TIMER1.timerClkDiv        = 8;
+TIMER1.peripheral.$assign = "TIMG0";
+
+TIMER2.timerMode          = "PERIODIC";
+TIMER2.interrupts         = ["ZERO"];
+TIMER2.$name              = "TIMER_100MS";
+TIMER2.timerClkPrescale   = 128;
+TIMER2.timerPeriod        = "100 ms";
+TIMER2.peripheral.$assign = "TIMG1";
+
+TIMER3.$name              = "TIMER_COUNTDOWN";
+TIMER3.timerMode          = "PERIODIC";
+TIMER3.timerClkDiv        = 8;
+TIMER3.timerPeriod        = "1000 ms";
+TIMER3.timerClkPrescale   = 128;
+TIMER3.interrupts         = ["ZERO"];
+TIMER3.peripheral.$assign = "TIMG2";
+
+TIMER4.$name              = "TIMER_ALARM";
+TIMER4.timerClkPrescale   = 256;
+TIMER4.timerMode          = "PERIODIC";
+TIMER4.interrupts         = ["ZERO"];
+TIMER4.timerPeriod        = "30000 ms";
+TIMER4.timerClkSrc        = "LFCLK";
+TIMER4.peripheral.$assign = "TIMG4";
+
+UART1.$name                            = "BLUETOOTH";
+UART1.rxFifoThreshold                  = "DL_UART_RX_FIFO_LEVEL_ONE_ENTRY";
+UART1.enableDMARX                      = false;
+UART1.enableDMATX                      = false;
+UART1.ovsRate                          = "16";
+UART1.enabledInterrupts                = ["RX"];
+UART1.direction                        = "RX";
+UART1.enableFIFO                       = false;
+UART1.uartClkSrc                       = "MFCLK";
+UART1.peripheral.$assign               = "UART0";
+UART1.peripheral.rxPin.$assign         = "PA9";
+UART1.rxPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric1";
+UART1.rxPinConfig.hideOutputInversion  = scripting.forceWrite(false);
+UART1.rxPinConfig.onlyInternalResistor = scripting.forceWrite(false);
+UART1.rxPinConfig.passedPeripheralType = scripting.forceWrite("Digital");
+
+/**
+ * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
+ * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
+ * re-solve from scratch.
+ */
+Board.peripheral.$suggestSolution          = "DEBUGSS";
+Board.peripheral.swclkPin.$suggestSolution = "PA20";
+Board.peripheral.swdioPin.$suggestSolution = "PA19";
+SYSCTL.peripheral.$suggestSolution         = "SYSCTL";
